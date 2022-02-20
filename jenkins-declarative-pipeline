@@ -18,6 +18,15 @@ pipeline {
                 }
                }
             }
+	    stage("dev deploy"){
+         steps{
+            sshagent(['dev-docker']) {
+                  sh 'ssh -o StrictHostKeyChecking=no ec2-user@172.31.90.229'
+                  sh 'ssh ec2-user@172.31.90.229 docker rm -f nodeapp'
+                  sh "ssh ec2-user@172.31.90.229 docker run -d -p 8080:8080 --name=nodeapp sarath818/node-app:v10"
+            } 
+        }
+     }
         
         }   
     }
